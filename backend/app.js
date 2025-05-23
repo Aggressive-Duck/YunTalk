@@ -1,11 +1,21 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require("express");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const cors = require('cors');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const authRouter = require("./routes/authRouter");
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+const app = express();
+
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+
+// API routes
+app.use("/api/auth", authRouter);
+
+module.exports = app;
