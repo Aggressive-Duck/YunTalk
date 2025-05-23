@@ -1,15 +1,26 @@
-
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../view/Login.vue'
+import Home from '../view/Home.vue'
 
 const routes = [
-  { path: '/', name: 'Login', component: Login },
-  // 未來可以加其他頁，例如 Home、Register 等
+  { path: '/', redirect: '/home' },
+  { path: '/login', name: 'Login', component: Login },
+  { path: '/home', name: 'Home', component: Home, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+// Navigation guard for authentication
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  if (to.meta.requiresAuth && !token) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router
