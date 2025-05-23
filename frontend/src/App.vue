@@ -1,9 +1,8 @@
-<script setup>
-
-</script>
-
 <template>
-  <router-view />
+  <div class="relative">
+      <router-view />
+  </div>
 </template>
 
-
+<script setup>
+</script>
