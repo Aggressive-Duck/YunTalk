@@ -1,18 +1,18 @@
 const mysql = require('mysql')
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: '100.107.63.58',
   user: 'kuan',
   password: '',
   database: 'yuntalk',
   port: 3306,
+  connectionLimit: 10,
 })
 
-connection.connect()
 
-connection.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
+pool.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
   if (err) throw err
 
   console.log('The solution is: ', rows[0].solution)
 })
 
-connection.end()
+module.exports = pool

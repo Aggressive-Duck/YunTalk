@@ -1,10 +1,18 @@
-const users = [
-  { id: 1, username: "admin", password: "password" }
-];
+// const users = [
+//   { id: 1, username: "admin", password: "password" }
+// ];
 
-exports.login = (req, res) => {
+const db = require("../db/queries");
+
+
+exports.login = async (req, res) => {
+  
   const { username, password } = req.body;
-  const user = users.find(u => u.username === username && u.password === password);
+
+  const users = await db.getAllUserAuthInfo();
+
+
+  const user = users.find(u => u.name === username && u.password === password);
   if (!user) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
