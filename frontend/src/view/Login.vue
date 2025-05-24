@@ -1,5 +1,5 @@
 <template>
-<div class="min-h-screen flex items-center justify-center bg-[#161511]">
+<div class="min-h-screen flex items-center justify-center bg-[#0E1013]">
   <div class="relative w-full max-w-md">
     
     <!-- 🔺這裡是 Logo -->
@@ -48,8 +48,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '/stores/auth'
 import { useRouter } from 'vue-router'
 
+const auth = useAuthStore()
 const username = ref('')
 const password = ref('')
 const error = ref('輸入帳號密碼即可登入')
@@ -66,7 +68,7 @@ async function login() {
   })
   if (res.ok) {
     const data = await res.json()
-    localStorage.setItem('token', data.token)
+    auth.setAuthData(data) // 儲存 token 和 user
     router.push('/home')
   } else {
     const err = await res.json()
