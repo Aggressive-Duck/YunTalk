@@ -14,6 +14,28 @@ function getAllUserAuthInfo() {
   });
 }
 
+function getLatestRatingId() {
+  return new Promise((resolve, reject) => {
+    pool.query("SELECT id FROM users ORDER BY id DESC LIMIT 1", (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+}
+
+function insertRating({ title, content }) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "INSERT INTO ratings (title, content) VALUES (?, ?)",
+      [title, content],
+      (err, results) => {
+        if (err) return reject(err);
+        resolve(results.insertId); // return the new row's id
+      }
+    );
+  });
+}
+
 async function insertUsername(username) {
   await pool.query("INSERT INTO users (user) VALUES ($1)", [username]);
 }
@@ -21,5 +43,7 @@ async function insertUsername(username) {
 module.exports = {
   getAllUsernames,
   getAllUserAuthInfo,
+  getLatestRatingId,
+  insertRating,
   insertUsername
 };
