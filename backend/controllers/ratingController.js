@@ -4,12 +4,12 @@ const db = require("../db/queries");
 // The controller receives req, res, and assumes multer has already handled the file
 exports.createRating = async (req, res) => {
   
-  const { title, content } = req.body;
+  const { user_id,title, content } = req.body;
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
   // You can save title/content to DB here if needed
-  await db.insertRating({ title, content });
+  await db.insertRating({  user_id,title, content });
 
   const imgId = await db.getLatestRatingId();
   // raname files

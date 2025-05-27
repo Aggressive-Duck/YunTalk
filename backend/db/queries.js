@@ -23,13 +23,13 @@ function getLatestRatingId() {
   });
 }
 
-function insertRating({ title, content }) {
+function insertRating({ user_id,title, content }) {
   return new Promise((resolve, reject) => {
     const createdAt = new Date();
     pool.query(
-      "INSERT INTO ratings (title, content, created_at) VALUES (?, ?, ?)",
+      "INSERT INTO ratings (user_id,title, content, created_at) VALUES (?,?, ?, ?)",
       
-      [title, content, createdAt],
+      [user_id,title, content, createdAt],
       (err, results) => {
         if (err) return reject(err);
         resolve(results.insertId); // return the new row's id
