@@ -16,7 +16,7 @@ function getAllUserAuthInfo() {
 
 function getLatestRatingId() {
   return new Promise((resolve, reject) => {
-    pool.query("SELECT id FROM users ORDER BY id DESC LIMIT 1", (err, results) => {
+    pool.query("SELECT id FROM ratings ORDER BY id DESC LIMIT 1", (err, results) => {
       if (err) return reject(err);
       resolve(results);
     });
@@ -25,9 +25,11 @@ function getLatestRatingId() {
 
 function insertRating({ title, content }) {
   return new Promise((resolve, reject) => {
+    const createdAt = new Date();
     pool.query(
-      "INSERT INTO ratings (title, content) VALUES (?, ?)",
-      [title, content],
+      "INSERT INTO ratings (title, content, created_at) VALUES (?, ?, ?)",
+      
+      [title, content, createdAt],
       (err, results) => {
         if (err) return reject(err);
         resolve(results.insertId); // return the new row's id
