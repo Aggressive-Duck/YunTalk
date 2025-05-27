@@ -16,7 +16,7 @@ function getAllUserAuthInfo() {
 
 function getLatestRatingId() {
   return new Promise((resolve, reject) => {
-    pool.query("SELECT id FROM users ORDER BY id DESC LIMIT 1", (err, results) => {
+    pool.query("SELECT id FROM ratings ORDER BY id DESC LIMIT 1", (err, results) => {
       if (err) return reject(err);
       resolve(results);
     });
