@@ -19,5 +19,7 @@ const upload = multer({ storage: storage });
 
 // Use the controller for the POST route
 router.post('/', upload.single('image'), ratingController.createRating);
+// Add GET route for fetching ratings
+router.get('/', ratingController.getRatings);
 
 module.exports = router;
