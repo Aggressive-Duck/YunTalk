@@ -7,8 +7,8 @@ import Rating from '../view/Rating.vue'
 const routes = [
   { path: '/', redirect: '/home' },
   { path: '/login', name: 'Login', component: Login },
-  { path: '/test', name: 'test', component: Test},
-  { path: '/rating', name: 'rating', component: Rating},
+  { path: '/test', name: 'test', component: Test, meta: { requiresAuth: true } },
+  { path: '/rating', name: 'rating', component: Rating, meta: { requiresAuth: true } },
   { path: '/home', name: 'Home', component: Home, meta: { requiresAuth: true } }
 ]
 
