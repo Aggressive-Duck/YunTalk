@@ -152,17 +152,6 @@
                     沒有更多評分了
                 </div>
                 <!-- kaun測試用 -->
-                 <div v-for="rating in ratings" :key="rating.id" class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out">
-                    <!-- 左邊圖片 -->
-                    <img :src="`/uploads/ratingImg/${rating.image_name}`" class="min-w-[250px] h-[150px] object-cover rounded-md" />
-                    
-                    <!-- 右側文字與評分 -->
-                    <div class="flex flex-col justify-between flex-1">
-                    <!-- 上方文字區塊 -->
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-800">{{ rating.title }}</h2>
-                        <p class="text-sm text-gray-500 mt-3">{{ rating.content }}</p>
-                        <p class="text-[12px] text-gray-400 mt-3">0則留言．0則評分</p>
             </div>
         </div>
         </div>
