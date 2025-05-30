@@ -9,7 +9,15 @@ const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/test', name: 'test', component: Test, meta: { requiresAuth: true } },
   { path: '/rating', name: 'rating', component: Rating, meta: { requiresAuth: true } },
-  { path: '/home', name: 'Home', component: Home, meta: { requiresAuth: true } }
+  { path: '/home', name: 'Home', component: Home, meta: { requiresAuth: true } },
+  
+  {
+    path: '/rating/:id',
+    name: 'RatingDetail',
+    component: () => import('../view/RatingDetail.vue'),
+    meta: { requiresAuth: true }
+  }
+
 ]
 
 const router = createRouter({
