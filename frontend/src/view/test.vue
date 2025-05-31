@@ -163,14 +163,16 @@
       </div>
     </div>
   </div>
-  <!-- 詳細內容彈窗 -->
+  <!-- 詳細內容彈窗 --><!-- 詳細內容彈窗 -->
   <div v-if="showDetail" class="modal fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
     @click.self="closeDetail">
-    <div class="modal-box max-w-xl p-6 bg-white rounded-lg relative">
+    <!-- ⬅️ 在這裡加紅框 -->
+    <div class="modal-box max-w-xl p-6 bg-white rounded-lg relative border border-red-500">
       <button class="absolute top-2 right-2 text-gray-400 hover:text-black" @click="closeDetail">✕</button>
       <RatingDetail v-if="selectedId" :id="Number(selectedId)" />
     </div>
   </div>
+<div>showDetail is: {{ showDetail }}</div>
 </template>
 
 <script setup>
