@@ -44,8 +44,10 @@ exports.getRatings = async (req, res) => {
  };
 
 const pool = require('../db/pool');
+
 exports.getRatingById = (req, res) => {
   const id = req.params.id;
+  console.log('[✅ 後端] 收到 fetchRatingById 請求，ID =', id);
   pool.query('SELECT * FROM ratings WHERE id = ?', [id], (err, rows) => {
     if (err) return res.status(500).json({ error: err });
     if (rows.length === 0) return res.status(404).json({ message: '找不到貼文' });
