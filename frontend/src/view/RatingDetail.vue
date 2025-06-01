@@ -61,9 +61,9 @@ async function fetchDetail() {
   try {
     const res = await axios.get(`/api/rating/${props.id}`)
     post.value = res.data
-    console.log('✅ 資料載入成功:', post.value)
+    console.log('資料載入成功:', post.value)
   } catch (err) {
-    console.error('❌ 請求失敗:', err)
+    console.error('請求失敗:', err)
   }
 }
 
@@ -71,7 +71,7 @@ watch(
   () => props.id,
   (id) => {
     if (id != null) {
-      console.log('🎯 偵測到 ID 變更:', id)
+      console.log('偵測到 ID 變更:', id)
       fetchDetail()
     }
   },
