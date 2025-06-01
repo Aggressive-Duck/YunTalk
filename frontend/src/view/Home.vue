@@ -18,8 +18,6 @@
         </div>
       </nav>    
 
-
-
       <!-- 中央文字（橘色背景區域內部置中） -->
         <div class="flex-1 flex flex-col items-center justify-center -mt-10 text-center">
             <div class="relative inline-block">
@@ -44,23 +42,30 @@
             />
 
             <!-- 搜尋按鈕 -->
-            <button  onclick="my_modal_1.showModal()" class="group px-4 ms-2 bg-[#042A2B] cursor-pointer transition-all ease-in-out  hover:bg-[#031b1c] text-white rounded-lg flex items-center justify-center">
+            <button @click="openModal" class="group px-4 ms-2 bg-[#042A2B] cursor-pointer transition-all ease-in-out  hover:bg-[#031b1c] text-white rounded-lg flex items-center justify-center">
                 <Plus class="w-4 h-4 transition-all duration-500 group-hover:mr-2" />
                 <span class="whitespace-nowrap overflow-hidden max-w-0 group-hover:max-w-[200px] transition-all duration-500 ease-in-out">新增評分</span>
             </button>
-            <dialog id="my_modal_1" class="modal">
-                <div class="modal-box w-[800px] h-100 max-w-full p-0 rounded-lg overflow-hidden flex">
 
-                    <!-- 左側區塊（2/6，背景色） -->
-                    <div class="w-2/5 bg-[#042A2B] p-6">
-                        <h3 class="text-2xl  text-white font-[bb]">新增評分項目</h3>
+            <!-- 新增評分 Modal -->
+             <dialog id="my_modal_1" class="modal" ref="modalRef">
+                <div class="modal-box w-[800px] h-100 max-w-full p-0 rounded-lg overflow-hidden flex bg-[transparent] shadow-none">
+
+                    <!-- 左側動畫區塊 -->
+                     
+                    <!-- ⛱ 空間始終存在 -->
+                    <div class="w-2/5">
+                    <transition name="slide-in">
+                        <div v-if="showLeft" class="bg-[#042A2B] h-full p-6 text-white">
+                        <h3 class="text-2xl font-[bb]">新增評分項目</h3>
                         <p class="mt-3">新增一個新的評分項目，讓別人評分!</p>
-                        
+                        </div>
+                    </transition>
                     </div>
 
-                    <!-- 右側內容區塊（4/6） -->    
-                    <div class="w-3/5 p-6 text-black bg-white">
-                        <form @submit.prevent="submitForm" enctype="multipart/form-data">
+                    <!-- 右側表單區塊 -->
+                    <div class="w-3/5 p-6 text-black bg-white z-10">
+                    <form @submit.prevent="submitForm" enctype="multipart/form-data">
                         <div class="mb-4">
                             <label class="block text-xs mb-2">評分標題</label>
                             <input
@@ -88,13 +93,14 @@
                             <button type="submit" class="bg-[#042A2B] cursor-pointer transition-all ease-in-out text-white rounded-lg text-[14px] mt-9 w-[100px] px-4 py-2 rounded">新增</button>
                         </div>
                     </form>
-                        
-
                     </div>
-                    
+
                 </div>
             </dialog>
+
+            
         </div>
+
         <div class="w-[1000px] mx-auto mt-6 flex gap-6 text-black">
             <!-- 左側分類 -->
             <div class="w-1/4">
@@ -110,111 +116,79 @@
             </div>
 
             <!-- 右側評分貼文 -->
-            
-                <div class="flex-1 space-y-4">
-                    <h2 class="text-l font-bold text-gray-800">一共有 40,325 個評分</h2>
-                        <div class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out">
-                            <!-- 左邊圖片 -->
-                            <img src="/img/1.jpg" class="min-w-[250px] h-[150px] object-cover rounded-md" />
-
-                            <!-- 右側文字與評分 -->
-                            <div class="flex flex-col justify-between flex-1">
-                            <!-- 上方文字區塊 -->
-                            <div>
-                                <h2 class="text-lg font-bold text-gray-800">胖貓咪</h2>
-                                <p class="text-sm text-gray-500 mt-3">他只是一隻聰明到靠北的貓咪。</p>
-                                <p class="text-[12px] text-gray-400 mt-3">7則留言．5000則評分</p>
-
-                            </div>
-
-                            <!-- 下方星星評分 -->
-                            <div class="flex items-center gap-2 mt-4 ">
-                                <!-- 分數數字 -->
-                                <span class="text-[15px] text-yellow-400 font-medium">4.8</span>
-
-                                <!-- 星星圖示 -->
-                                <div class="flex text-yellow-400">
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 stroke-yellow-400" /> <!-- 空心星星 -->
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out">
-                            <!-- 左邊圖片 -->
-                            <img src="/img/2.jpg" class="min-w-[250px] h-[150px] object-cover rounded-md" />
-
-                            <!-- 右側文字與評分 -->
-                            <div class="flex flex-col justify-between flex-1">
-                            <!-- 上方文字區塊 -->
-                            <div>
-                                <h2 class="text-lg font-bold text-gray-800">有錢的貓咪</h2>
-                                <p class="text-sm text-gray-500 mt-3">這是一個有錢到靠北的貓咪，但她不會給你錢。</p>
-                                <p class="text-[12px] text-gray-400 mt-3">72則留言．120則評分</p>
-
-                            </div>
-
-                            <!-- 下方星星評分 -->
-                            <div class="flex items-center gap-2 mt-4 ">
-                                <!-- 分數數字 -->
-                                <span class="text-[15px] text-yellow-400 font-medium">2.1</span>
-
-                                <!-- 星星圖示 -->
-                                <div class="flex text-yellow-400">
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <StarHalf class="w-3 h-3 stroke-yellow-400 fill-yellow-400" />
-                                <Star class="w-3 h-3 stroke-yellow-400" />
-                                <Star class="w-3 h-3 stroke-yellow-400" /> <!-- 空心星星 -->
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out">
-                            <!-- 左邊圖片 -->
-                            <img src="/img/3.jpg" class="min-w-[250px] h-[150px] object-cover rounded-md" />
-
-                            <!-- 右側文字與評分 -->
-                            <div class="flex flex-col justify-between flex-1">
-                            <!-- 上方文字區塊 -->
-                            <div>
-                                <h2 class="text-lg font-bold text-gray-800">被腰斬的貓咪</h2>
-                                <p class="text-sm text-gray-500 mt-3">被貸款王腰斬的貓咪，他很可憐。</p>
-                                <p class="text-[12px] text-gray-400 mt-3">2則留言．10則評分</p>
-
-                            </div>
-
-                            <!-- 下方星星評分 -->
-                            <div class="flex items-center gap-2 mt-4 ">
-                                <!-- 分數數字 -->
-                                <span class="text-[15px] text-yellow-400 font-medium">2</span>
-
-                                <!-- 星星圖示 -->
-                                <div class="flex text-yellow-400">
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <Star class="w-3 h-3 fill-yellow-400" />
-                                <StarHalf class="w-3 h-3 stroke-yellow-400 fill-yellow-400" />
-                                <Star class="w-3 h-3 stroke-yellow-400" />
-                                <Star class="w-3 h-3 stroke-yellow-400" /> <!-- 空心星星 -->
-                                </div>
-                            </div>
-                            </div>
-                        </div>
+            <div class="flex-1 space-y-4">
+                <h2 class="text-l font-bold text-gray-800">一共有 {{ totalRatings }} 個評分</h2>
+                
+                <!-- 可點擊的評分卡片 -->
+                <div v-for="rating in ratings" :key="rating.id" 
+                     @click="openRatingDetail(rating.id)"
+                     class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-200 cursor-pointer transition-all ease-in-out">
+                    <!-- 左邊圖片 -->
+                    <img :src="`/uploads/ratingImg/${rating.image_name}`" class="w-[250px] h-[150px] object-cover rounded-md" />
+                    
+                    <!-- 右側文字與評分 -->
+                    <div class="flex flex-col justify-between flex-1">
+                    <!-- 上方文字區塊 -->
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-800">{{ rating.title }}</h2>
+                        <p class="text-sm text-gray-500 mt-3 line-clamp-2">{{ rating.content }}</p>
+                        <p class="text-[12px] text-gray-400 mt-3">{{ rating.comment_count || 0 }}則留言 ． 1243熱度</p>
+                    </div>
+                    
+                    <!-- 下方星星評分 -->
+                    <div class="flex items-center gap-2 mt-4">
+                        <!-- 分數數字 -->
+                        <span class="text-[15px] text-yellow-400 font-medium">0.0</span>
                         
-                    <!-- 更多卡片... -->
+                        <!-- 星星圖示 -->
+                        <div class="flex text-yellow-400">
+                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- 載入中指示器 -->
+                <div v-if="loading" class="flex justify-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#042A2B]"></div>
+                </div>
+                
+                <!-- 沒有更多資料提示 -->
+                <div v-if="!hasMore && ratings.length > 0" class="text-center text-[13px] py-5 text-gray-400">
+                    沒有更多評分了...（＞人＜；）
                 </div>
             </div>
+        </div>
     </div>
+
+    <!-- Rating Detail Component -->
+    <RatingDetail ref="ratingDetailRef" @commentAdded="handleCommentAdded" />
   </div>
 </template>
 
+<style>
+/* 加上進場動畫樣式 */
+.slide-in-enter-from {
+  transform: translateX(100%);
+}
+.slide-in-enter-active {
+  transition: transform 0.5s ease;
+}
+.slide-in-enter-to {
+  transform: translateX(0%);
+}
+</style>
+
 <script setup>
-import { Sparkles,Search,LoaderPinwheel,ChartPie,BookOpen,GraduationCap,Toilet,Speech,Star, StarHalf,Plus} from 'lucide-vue-next'
+import { Sparkles, ChartPie, BookOpen, GraduationCap, Toilet, Speech, Star, Plus } from 'lucide-vue-next'
 import { useAuthStore } from '/stores/auth'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import RatingDetail from '../components/RatingDetail.vue'
+
 const auth = useAuthStore()
 
 const title = ref('')
@@ -222,6 +196,54 @@ const content = ref('')
 const submitted = ref(false)
 const imageFile = ref(null)
 const imageUrl = ref('')
+
+// 懶加載相關變數
+const ratings = ref([])
+const loading = ref(false)
+const hasMore = ref(true)
+const currentPage = ref(0)
+const totalRatings = ref(0)
+
+// Rating detail component reference
+const ratingDetailRef = ref(null)
+
+// 開啟評分詳細頁面
+function openRatingDetail(ratingId) {
+  ratingDetailRef.value.openModal(ratingId)
+}
+
+// 載入評分資料
+async function loadRatings() {
+  if (loading.value || !hasMore.value) return
+  
+  loading.value = true
+  try {
+    const res = await fetch(`/api/rating?page=${currentPage.value}`)
+    if (res.ok) {
+      const data = await res.json()
+      ratings.value.push(...data.ratings)
+      hasMore.value = data.hasMore
+      totalRatings.value = data.total
+      currentPage.value++
+    }
+  } catch (error) {
+    console.error('載入評分失敗:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// 滾動事件處理
+function handleScroll() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+  
+  // 當滾動到接近底部時載入更多資料
+  if (scrollTop + windowHeight >= documentHeight - 100) {
+    loadRatings()
+  }
+}
 
 function onFileChange(e) {
   imageFile.value = e.target.files[0]
@@ -244,7 +266,56 @@ async function submitForm() {
   if (res.ok) {
     const data = await res.json()
     submitted.value = true
-    imageUrl.value = data.imageUrl // URL to the uploaded image
+    imageUrl.value = data.imageUrl
+    // 重新載入第一頁資料
+    ratings.value = []
+    currentPage.value = 0
+    hasMore.value = true
+    loadRatings()
   }
+}
+
+// Handle comment added event
+async function handleCommentAdded(ratingId) {
+  // Find and update the specific rating in the list
+  const ratingIndex = ratings.value.findIndex(r => r.id === ratingId)
+  if (ratingIndex !== -1) {
+    // Fetch updated rating data
+    try {
+      const res = await fetch(`/api/rating/${ratingId}`)
+      if (res.ok) {
+        const data = await res.json()
+        // Update the comment count in the ratings list
+        ratings.value[ratingIndex].comment_count = data.comments.length
+      }
+    } catch (error) {
+      console.error('Failed to update comment count:', error)
+    }
+  }
+}
+
+onMounted(() => {
+  loadRatings()
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const modalRef = ref(null)
+const showLeft = ref(false)
+
+function openModal() {
+  modalRef.value.showModal()
+  showLeft.value = false
+  setTimeout(() => {
+    showLeft.value = true // 控制左側區塊出現（會觸發動畫）
+  }, 300) // 可視右側內容完成時間調整延遲（單位毫秒）
+}
+
+function closeModal() {
+  showLeft.value = false
+  modalRef.value.close()
 }
 </script>

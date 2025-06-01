@@ -1,139 +1,179 @@
 <template>
   <dialog ref="detailModal" class="modal" @click="closeOnBackdrop">
-    <div class="modal-box w-[900px] max-w-[90vw] h-[80vh] p-0 rounded-2xl overflow-hidden bg-white" @click.stop>
-      <!-- 載入中狀態 -->
-      <div v-if="loading" class="flex justify-center items-center h-full">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#042A2B]"></div>
-      </div>
+    <div class="modal-box  min-w-[100vw] h-[100vh] overflow-hidden bg-white flex items-center justify-center" @click.stop  v-if="rating">
+      <div class="flex w-full min-h-screen p-6 gap-6">
+        <!-- ✅ 左側：7/10 -->
+        <div class="w-[70%] bg-white rounded-xl  p-6 space-y-6 ">
+          <div class="flex gap-10">
+            <!-- 左邊圖片 -->
+              <img 
+                :src="`/uploads/ratingImg/${rating.image_name}`" 
+                :alt="rating.title"
+                class="w-[500px] h-[300px] object-cover rounded-lg mb-4"
+              />
+            <!-- 右邊評分總覽 -->
+            <div class="flex-1 mt-1">
+              <h2 class="text-[22px] font-bold text-black">{{ rating.title }}</h2>
+              <h2 class="text-[12px]  text-gray-400">2115 則熱度</h2>
+              <div class="text-4xl font-bold mt-6  text-yellow-500">4.3 <span class="text-base text-gray-500">/ 5 分</span></div>
 
-      <!-- 錯誤狀態 -->
-      <div v-else-if="error" class="flex flex-col justify-center items-center h-full p-8">
-        <p class="text-red-500 text-lg mb-4">{{ error }}</p>
-        <button @click="closeModal" class="bg-[#042A2B] text-white px-6 py-3 rounded-lg hover:bg-[#031b1c]">
-          關閉
-        </button>
-      </div>
-
-      <!-- 評分詳細內容 -->
-      <div v-else-if="rating" class="h-full flex flex-col">
-        <!-- Header with close button -->
-        <div class="flex justify-between items-center p-4 border-b">
-          <h2 class="text-xl font-bold text-gray-800">評分詳情</h2>
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
-            <X class="w-6 h-6" />
-          </button>
-        </div>
-
-        <!-- Scrollable content -->
-        <div class="flex-1 overflow-y-auto">
-          <!-- 圖片和基本資訊 -->
-          <div class="p-6">
-            <!-- Poster ID, Title and Rating above image -->
-            <div class="mb-4">
-              <p class="text-sm text-gray-500 mb-2">發布者 ID: {{ rating.user_id }}</p>
-              <h1 class="text-3xl font-bold text-gray-800 mb-3">{{ rating.title }}</h1>
-              
-              <!-- Rating display -->
-              <div class="flex items-center gap-3 mb-4">
-                <span class="text-2xl text-yellow-400 font-bold">0.0</span>
-                <div class="flex text-yellow-400">
-                  <Star v-for="i in 5" :key="i" class="w-5 h-5 stroke-yellow-400" />
+              <!-- 條狀評分 -->
+              <div class="space-y-1 mt-4 text-yellow-500">
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="w-4">5★</span>
+                  <progress class="progress progress-warning w-56 h-2 ms-2" value="1985" max="2115"></progress>
+                  <span class="w-10 text-right">1985</span>
                 </div>
-                <span class="text-gray-500 ml-2">{{ comments.length }} 則評論</span>
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="w-4">4★</span>
+                  <progress class="progress progress-warning w-56 h-2 ms-2" value="356" max="2115"></progress>
+                  <span class="w-10 text-right">356</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="w-4">3★</span>
+                  <progress class="progress progress-warning w-56 h-2 ms-2" value="130" max="2115"></progress>
+                  <span class="w-10 text-right">130</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="w-4">2★</span>
+                  <progress class="progress progress-warning w-56 h-2 ms-2" value="90" max="2115"></progress>
+                  <span class="w-10 text-right">90</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="w-4">1★</span>
+                  <progress class="progress progress-warning w-56 h-2 ms-2" value="33" max="2115"></progress>
+                  <span class="w-10 text-right">33</span>
+                </div>
+              </div>
+              <!-- 下方星星評分 -->
+              <div class="flex items-center gap-2 mt-6">
+                <div class="flex text-yellow-400">
+                  <Star class="w-6 h-6 stroke-yellow-400" />
+                  <Star class="w-6 h-6 stroke-yellow-400" />
+                  <Star class="w-6 h-6 stroke-yellow-400" />
+                  <Star class="w-6 h-6 stroke-yellow-400" />
+                  <Star class="w-6 h-6 stroke-yellow-400" />
+                </div>
               </div>
             </div>
+          </div>
+        <div class="w-[100%] h-[50px] bg-[#fef1cc] rounded-lg flex items-center ps-5">
+          <BotMessageSquare class="w-4 h-4 stroke-yellow-600"/>
+          <p class="text-sm ms-2 text-yellow-600 text-[16px]">天啊 ! 這隻貓咪簡直比我聰明100倍</p>
+        </div>
+        <div class="border-t pt-5 text-gray-200">
+              <h3 class="text-[16px] font-bold text-gray-800">介紹</h3>
+              <p class="text-sm mt-3 text-gray-500 text-[15px]">{{ rating.content }}</p>
 
-            <img 
-              :src="`/uploads/ratingImg/${rating.image_name}`" 
-              :alt="rating.title"
-              class="w-full h-[300px] object-cover rounded-lg mb-4"
+              <h3 class="text-[16px] mt-10 font-bold text-gray-800">創建日期</h3>
+              <p class="text-sm mt-3 text-gray-500 text-[15px]">{{ formatDate(rating.created_at) }}</p>
+        </div>
+
+        </div>
+        
+
+        <!-- ✅ 右側：3/10（你可以自行放內容） -->
+      <!-- 固定高度容器，使用 flex 垂直排列 -->
+      <div class="w-[30%] bg-gray-100 rounded-xl p-6 flex flex-col justify-between">
+
+        <!-- 上方內容（可放留言列表）-->
+        <div class="overflow-y-auto text-sm text-gray-500">
+          <h3 class="text-[14px] font-bold text-gray-800 mb-4">{{ comments.length }} 則留言</h3>
+          <!-- 將來可以在這裡放留言列表 -->
+          <div v-if="comments.length === 0" class="flex flex-col items-center justify-center py-30 text-gray-400 text-center">
+            <img
+              src="/img/boring_cat.png"
+              alt="Decorative Cat"
+              class="w-[300px] opacity-40 pointer-events-none pb-6 -ms-12"
             />
-            <p class="text-gray-600 leading-relaxed mb-4">{{ rating.content }}</p>
-            
-            <!-- Publication date -->
-            <div class="border-t pt-4 mb-6">
-              <p class="text-sm text-gray-400">
-                發布於 {{ formatDate(rating.created_at) }}
-              </p>
-            </div>
+            <p class="text-sm">！還沒有留言，成為第一個留言的人吧！</p>
           </div>
+          <div v-else class=" mt-5 space-y-4 max-h-[650px] overflow-y-auto scrollbar-hide">
+            <div 
+              v-for="comment in comments" 
+              :key="comment.id" 
+              class="flex gap-4 items-start"
+            >
+              <!-- 頭像 -->
+              <div class="w-10 h-10 bg-[#042A2B] text-white rounded-lg mt-1 flex items-center justify-center text-sm font-medium shrink-0">
+                {{ comment.user_name.charAt(0).toUpperCase() }}
+              </div>
 
-          <!-- 評論區域 -->
-          <div class="px-6 pb-4">
-            <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <h3 class="text-lg font-bold text-gray-800 mb-3">寫個評論吧！</h3>
-              <textarea 
-                v-model="userComment"
-                placeholder="寫下你的評論..."
-                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#042A2B] focus:ring-1 resize-none text-sm text-gray-800"
-                rows="3"
-              ></textarea>
-              <button 
-                @click="submitComment"
-                :disabled="userComment.trim() === ''"
-                class="mt-3 bg-[#042A2B] text-white px-4 py-2 rounded-lg hover:bg-[#031b1c] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
-              >
-                提交評論
-              </button>
-            </div>
-          </div>
-
-          <!-- 評論列表 -->
-          <div class="px-6 pb-6">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">評論 ({{ comments.length }})</h3>
-            
-            <div v-if="comments.length === 0" class="text-center py-8 text-gray-500">
-              還沒有評論，成為第一個評論的人吧！
-            </div>
-            
-            <div v-else class="space-y-4 max-h-[300px] overflow-y-auto">
-              <div v-for="comment in comments" :key="comment.id" 
-                class="border border-gray-200 rounded-lg p-4">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-[#042A2B] text-white rounded-full flex items-center justify-center text-sm font-medium">
-                      {{ comment.user_name.charAt(0).toUpperCase() }}
-                    </div>
-                    <span class="font-medium text-gray-800">{{ comment.user_name }}</span>
-                  </div>
-                  <span class="text-sm text-gray-400">{{ formatDate(comment.create_at) }}</span>
+              <!-- 右側內容 -->
+              <div class="flex-1">
+                <!-- 使用者名稱 -->
+                <div class=" mt-1 font-medium text-gray-500 text-[12px]">
+                  {{ comment.user_name }}
                 </div>
-                <p class="text-gray-600 ml-11 mb-3">{{ comment.content }}</p>
-                
-                <!-- Like section -->
-                <div class="flex items-center justify-between ml-11">
+
+                <!-- 留言內容 -->
+                <p class="text-sm text-gray-700 mt-1 text-[16px]">
+                  {{ comment.content }}
+                </p>
+
+                <!-- 時間與按讚 -->
+                <div class="flex items-center justify-between mt-2 text-[10px] text-gray-500">
+                  <!-- 留言時間 -->
+                  <span>{{ formatDate(comment.create_at) }}</span>
+
+                  <!-- 按讚按鈕 -->
                   <button 
                     @click="likeComment(comment.id)"
                     :disabled="likingComments.has(comment.id)"
                     :class="[
-                      'flex items-center gap-2 transition-colors text-sm',
-                      likingComments.has(comment.id) 
-                        ? 'text-gray-400 cursor-not-allowed' 
-                        : 'text-gray-500 hover:text-red-500 cursor-pointer'
+                      'flex items-center gap-1 transition-colors',
+                      likingComments.has(comment.id)
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-500 hover:text-red-500'
                     ]"
                   >
                     <Heart 
                       :class="[
-                        'w-4 h-4', 
+                        'w-4 h-4',
                         likingComments.has(comment.id) ? 'animate-pulse text-gray-400' : ''
-                      ]" 
+                      ]"
                     />
                     <span>{{ comment.like_count || 0 }}</span>
-                    <span v-if="likingComments.has(comment.id)" class="text-xs text-gray-400"></span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
+
+        </div>
+
+        <!-- 下方留言輸入區 -->
+        <div class="mt-4">
+          <textarea 
+            v-model="userComment"
+            placeholder="寫下你的留言"
+            class="w-full px-3 py-3 bg-white border transition-all ease-in-out border-gray-200 rounded-lg focus:outline-none focus:border-[#042A2B] focus:ring-1 resize-none text-sm text-gray-800"
+            rows="3"
+          ></textarea>
+
+          <!-- ✅ 按鈕靠右 -->
+          <div class="flex justify-end">
+            <button 
+              @click="submitComment"
+              :disabled="userComment.trim() === ''"
+              class="mt-3 bg-[#042A2B] cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#031b1c] w-[100px] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+            >
+              發送
+            </button>
+          </div>
         </div>
       </div>
+
+      </div>
+
+
     </div>
   </dialog>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { X, Star, Heart } from 'lucide-vue-next'
+import { X, Star, Heart, BotMessageSquare  } from 'lucide-vue-next'
 import { useAuthStore } from '/stores/auth'
 
 const auth = useAuthStore()
@@ -264,3 +304,22 @@ function formatDate(dateString) {
   })
 }
 </script>
+<style>
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}.slide-fade-enter-from {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+</style>
