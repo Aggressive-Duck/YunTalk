@@ -6,6 +6,7 @@ const pool = mysql.createPool({
   database: 'yuntalk',
   port: 3306,
   connectionLimit: 10,
+  charset: 'utf8mb4',
 })
 
 
