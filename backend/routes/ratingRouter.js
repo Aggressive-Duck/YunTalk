@@ -22,4 +22,11 @@ router.post('/', upload.single('image'), ratingController.createRating);
 // Add GET route for fetching ratings
 router.get('/', ratingController.getRatings);
 
+// Add GET route for fetching single rating with comments
+router.get('/:id', ratingController.getRatingById);
+// Add POST route for adding comments
+router.post('/:id/comment', ratingController.addComment);
+// Add PUT route for liking comments (put this BEFORE the /:id route)
+router.put('/comment/:commentId/like', ratingController.likeComment);
+
 module.exports = router;

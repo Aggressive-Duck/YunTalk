@@ -18,8 +18,6 @@
         </div>
       </nav>    
 
-
-
       <!-- 中央文字（橘色背景區域內部置中） -->
         <div class="flex-1 flex flex-col items-center justify-center -mt-10 text-center">
             <div class="relative inline-block">
@@ -48,14 +46,14 @@
                 <Plus class="w-4 h-4 transition-all duration-500 group-hover:mr-2" />
                 <span class="whitespace-nowrap overflow-hidden max-w-0 group-hover:max-w-[200px] transition-all duration-500 ease-in-out">新增評分</span>
             </button>
+
+            <!-- 新增評分 Modal -->
             <dialog id="my_modal_1" class="modal">
                 <div class="modal-box w-[800px] h-100 max-w-full p-0 rounded-lg overflow-hidden flex">
-
                     <!-- 左側區塊（2/6，背景色） -->
                     <div class="w-2/5 bg-[#042A2B] p-6">
                         <h3 class="text-2xl  text-white font-[bb]">新增評分項目</h3>
                         <p class="mt-3">新增一個新的評分項目，讓別人評分!</p>
-                        
                     </div>
 
                     <!-- 右側內容區塊（4/6） -->    
@@ -88,13 +86,11 @@
                             <button type="submit" class="bg-[#042A2B] cursor-pointer transition-all ease-in-out text-white rounded-lg text-[14px] mt-9 w-[100px] px-4 py-2 rounded">新增</button>
                         </div>
                     </form>
-                        
-
                     </div>
-                    
                 </div>
             </dialog>
         </div>
+
         <div class="w-[1000px] mx-auto mt-6 flex gap-6 text-black">
             <!-- 左側分類 -->
             <div class="w-1/4">
@@ -111,9 +107,12 @@
 
             <!-- 右側評分貼文 -->
             <div class="flex-1 space-y-4">
-                <h2 class="text-l font-bold text-gray-800">一共有 40,325 個評分</h2>
-                <!-- kaun測試用 -->
-                <div v-for="rating in ratings" :key="rating.id" class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out">
+                <h2 class="text-l font-bold text-gray-800">一共有 {{ totalRatings }} 個評分</h2>
+                
+                <!-- 可點擊的評分卡片 -->
+                <div v-for="rating in ratings" :key="rating.id" 
+                     @click="openRatingDetail(rating.id)"
+                     class="bg-white rounded-lg p-2 flex gap-4 hover:bg-gray-100 cursor-pointer transition-all ease-in-out hover:shadow-md">
                     <!-- 左邊圖片 -->
                     <img :src="`/uploads/ratingImg/${rating.image_name}`" class="min-w-[250px] h-[150px] object-cover rounded-md" />
                     
@@ -123,13 +122,13 @@
                     <div>
                         <h2 class="text-lg font-bold text-gray-800">{{ rating.title }}</h2>
                         <p class="text-sm text-gray-500 mt-3">{{ rating.content }}</p>
-                        <p class="text-[12px] text-gray-400 mt-3">0則留言．0則評分</p>
+                        <p class="text-[12px] text-gray-400 mt-3">{{ rating.comment_count || 0 }}則留言</p>
                     </div>
                     
                     <!-- 下方星星評分 -->
                     <div class="flex items-center gap-2 mt-4">
                         <!-- 分數數字 -->
-                        <span class="text-[15px] text-yellow-400 font-medium">0</span>
+                        <span class="text-[15px] text-yellow-400 font-medium">0.0</span>
                         
                         <!-- 星星圖示 -->
                         <div class="flex text-yellow-400">
@@ -141,6 +140,7 @@
                         </div>
                     </div>
                 </div>
+                </div>
 
                 <!-- 載入中指示器 -->
                 <div v-if="loading" class="flex justify-center py-4">
@@ -151,18 +151,21 @@
                 <div v-if="!hasMore && ratings.length > 0" class="text-center py-4 text-gray-500">
                     沒有更多評分了
                 </div>
-                <!-- kaun測試用 -->
             </div>
         </div>
-        </div>
     </div>
+
+    <!-- Rating Detail Component -->
+    <RatingDetail ref="ratingDetailRef" @commentAdded="handleCommentAdded" />
   </div>
 </template>
 
 <script setup>
-import { Sparkles,Search,LoaderPinwheel,ChartPie,BookOpen,GraduationCap,Toilet,Speech,Star, StarHalf,Plus} from 'lucide-vue-next'
+import { Sparkles, ChartPie, BookOpen, GraduationCap, Toilet, Speech, Star, Plus } from 'lucide-vue-next'
 import { useAuthStore } from '/stores/auth'
 import { ref, onMounted, onUnmounted } from 'vue'
+import RatingDetail from '../components/RatingDetail.vue'
+
 const auth = useAuthStore()
 
 const title = ref('')
@@ -177,6 +180,14 @@ const loading = ref(false)
 const hasMore = ref(true)
 const currentPage = ref(0)
 const totalRatings = ref(0)
+
+// Rating detail component reference
+const ratingDetailRef = ref(null)
+
+// 開啟評分詳細頁面
+function openRatingDetail(ratingId) {
+  ratingDetailRef.value.openModal(ratingId)
+}
 
 // 載入評分資料
 async function loadRatings() {
@@ -238,6 +249,25 @@ async function submitForm() {
     currentPage.value = 0
     hasMore.value = true
     loadRatings()
+  }
+}
+
+// Handle comment added event
+async function handleCommentAdded(ratingId) {
+  // Find and update the specific rating in the list
+  const ratingIndex = ratings.value.findIndex(r => r.id === ratingId)
+  if (ratingIndex !== -1) {
+    // Fetch updated rating data
+    try {
+      const res = await fetch(`/api/rating/${ratingId}`)
+      if (res.ok) {
+        const data = await res.json()
+        // Update the comment count in the ratings list
+        ratings.value[ratingIndex].comment_count = data.comments.length
+      }
+    } catch (error) {
+      console.error('Failed to update comment count:', error)
+    }
   }
 }
 
