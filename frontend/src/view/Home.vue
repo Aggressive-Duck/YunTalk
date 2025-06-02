@@ -13,8 +13,8 @@
       <nav class="w-full flex justify-between items-center px-6  bg-transparent shadow-none ps-50 pe-50">
         <img src="/img/logo.png" alt="Logo" class="w-27 h-27" />
         <div class="space-x-4">
-          <a href="#" class="hover:underline">{{auth.user.id}}</a>
-          <a href="#" class="hover:underline">爆炸</a>
+          <a href="#" class="hover:underline"></a>
+          <a href="#" class="hover:underline"></a>
         </div>
       </nav>    
 

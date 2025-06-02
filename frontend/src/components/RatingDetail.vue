@@ -89,7 +89,7 @@
         <div class="overflow-y-auto text-sm text-gray-500">
           <h3 class="text-[14px] font-bold text-gray-800 mb-4">{{ comments.length }} 則留言</h3>
           <!-- 將來可以在這裡放留言列表 -->
-          <div v-if="comments.length === 0" class="flex flex-col items-center justify-center py-30 text-gray-400 text-center">
+          <div v-if="comments.length === 0" class="flex flex-col items-center justify-center  text-gray-400 text-center">
             <img
               src="/img/boring_cat.png"
               alt="Decorative Cat"
@@ -97,7 +97,7 @@
             />
             <p class="text-sm">！還沒有留言，成為第一個留言的人吧！</p>
           </div>
-          <div v-else class=" mt-5 space-y-4 max-h-[400px] overflow-y-auto scrollbar-hide">
+          <div v-else class=" mt-5 space-y-4 h-[65vh] overflow-y-auto scrollbar-hide">
             <div 
               v-for="comment in comments" 
               :key="comment.id" 
