@@ -128,6 +128,21 @@ function getCommentById(commentId) {
   });
 }
 
+// ...existing code...
+
+function updateRatingScore(ratingId, score) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "UPDATE ratings SET score = ? WHERE id = ?",
+      [score, ratingId],
+      (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      }
+    );
+  });
+}
+
 module.exports = {
   getAllUserAuthInfo,
   getLatestRatingId,
@@ -138,5 +153,6 @@ module.exports = {
   getCommentsByRatingId,
   insertComment,
   updateCommentLikes,
-  getCommentById
+  getCommentById,
+  updateRatingScore  // Add this new function
 };

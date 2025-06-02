@@ -28,5 +28,6 @@ router.get('/:id', ratingController.getRatingById);
 router.post('/:id/comment', ratingController.addComment);
 // Add PUT route for liking comments (put this BEFORE the /:id route)
 router.put('/comment/:commentId/like', ratingController.likeComment);
+router.put('/:id/score', ratingController.updateRatingScore);
 
 module.exports = router;

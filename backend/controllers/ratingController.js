@@ -92,3 +92,22 @@ exports.likeComment = async (req, res) => {
     res.status(500).json({ error: 'Failed to like comment' });
   }
 };
+
+// ...existing code...
+
+exports.updateRatingScore = async (req, res) => {
+  try {
+    const ratingId = req.params.id;
+    const { score } = req.body;
+    
+    // Validate score (1-5)
+    if (!score || score < 1 || score > 5) {
+      return res.status(400).json({ error: 'Score must be between 1 and 5' });
+    }
+    
+    await db.updateRatingScore(ratingId, score);
+    res.json({ success: true, score });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update rating score' });
+  }
+};

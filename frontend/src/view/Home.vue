@@ -138,15 +138,20 @@
                     <!-- 下方星星評分 -->
                     <div class="flex items-center gap-2 mt-4">
                         <!-- 分數數字 -->
-                        <span class="text-[15px] text-yellow-400 font-medium">0.0</span>
+                        <span class="text-[15px] text-yellow-400 font-medium">{{ rating.score || 0.0 }}</span>
                         
                         <!-- 星星圖示 -->
                         <div class="flex text-yellow-400">
-                        <Star class="w-3 h-3 stroke-yellow-400" />
-                        <Star class="w-3 h-3 stroke-yellow-400" />
-                        <Star class="w-3 h-3 stroke-yellow-400" />
-                        <Star class="w-3 h-3 stroke-yellow-400" />
-                        <Star class="w-3 h-3 stroke-yellow-400" />
+                        <Star 
+                          v-for="star in 5" 
+                          :key="star"
+                          :class="[
+                            'w-3 h-3',
+                            (rating.score || 0) >= star 
+                              ? 'fill-yellow-400 stroke-yellow-400' 
+                              : 'stroke-yellow-400'
+                          ]"
+                        />
                         </div>
                     </div>
                 </div>
@@ -166,7 +171,11 @@
     </div>
 
     <!-- Rating Detail Component -->
-    <RatingDetail ref="ratingDetailRef" @commentAdded="handleCommentAdded" />
+    <RatingDetail 
+    ref="ratingDetailRef" 
+    @commentAdded="handleCommentAdded" 
+    @scoreUpdated="handleScoreUpdated"
+    />
   </div>
 </template>
 
@@ -291,6 +300,14 @@ async function handleCommentAdded(ratingId) {
     } catch (error) {
       console.error('Failed to update comment count:', error)
     }
+  }
+}
+
+function handleScoreUpdated(ratingId, newScore) {
+  // Find and update the specific rating in the list
+  const ratingIndex = ratings.value.findIndex(r => r.id === ratingId)
+  if (ratingIndex !== -1) {
+    ratings.value[ratingIndex].score = newScore
   }
 }
 

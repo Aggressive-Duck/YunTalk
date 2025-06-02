@@ -15,7 +15,7 @@
             <div class="flex-1 mt-1">
               <h2 class="text-[22px] font-bold text-black">{{ rating.title }}</h2>
               <h2 class="text-[12px]  text-gray-400">2115 則熱度</h2>
-              <div class="text-4xl font-bold mt-6  text-yellow-500">4.3 <span class="text-base text-gray-500">/ 5 分</span></div>
+              <div class="text-4xl font-bold mt-6  text-yellow-500">{{ rating.score || 0 }} <span class="text-base text-gray-500">/ 5 分</span></div>
 
               <!-- 條狀評分 -->
               <div class="space-y-1 mt-4 text-yellow-500">
@@ -45,14 +45,23 @@
                   <span class="w-10 text-right">33</span>
                 </div>
               </div>
-              <!-- 下方星星評分 -->
+              <!-- 互動式星星評分 -->
               <div class="flex items-center gap-2 mt-6">
+                <span class="text-sm text-gray-600 mr-2">給個評分：</span>
                 <div class="flex text-yellow-400">
-                  <Star class="w-6 h-6 stroke-yellow-400" />
-                  <Star class="w-6 h-6 stroke-yellow-400" />
-                  <Star class="w-6 h-6 stroke-yellow-400" />
-                  <Star class="w-6 h-6 stroke-yellow-400" />
-                  <Star class="w-6 h-6 stroke-yellow-400" />
+                  <Star 
+                    v-for="star in 5" 
+                    :key="star"
+                    @click="updateScore(star)"
+                    @mouseenter="hoverScore = star"
+                    @mouseleave="hoverScore = 0"
+                    :class="[
+                      'w-6 h-6 cursor-pointer transition-all duration-200',
+                      (hoverScore >= star || currentScore >= star) 
+                        ? 'fill-yellow-400 stroke-yellow-400' 
+                        : 'stroke-yellow-400 hover:fill-yellow-300'
+                    ]"
+                  />
                 </div>
               </div>
             </div>
@@ -88,7 +97,7 @@
             />
             <p class="text-sm">！還沒有留言，成為第一個留言的人吧！</p>
           </div>
-          <div v-else class=" mt-5 space-y-4 max-h-[650px] overflow-y-auto scrollbar-hide">
+          <div v-else class=" mt-5 space-y-4 max-h-[400px] overflow-y-auto scrollbar-hide">
             <div 
               v-for="comment in comments" 
               :key="comment.id" 
@@ -178,9 +187,9 @@ import { useAuthStore } from '/stores/auth'
 
 const auth = useAuthStore()
 
-// Props and emits
+// Props and emits - fix duplicate declarations
 defineExpose({ openModal })
-const emit = defineEmits(['commentAdded'])
+const emit = defineEmits(['commentAdded', 'scoreUpdated'])
 
 // Reactive data
 const detailModal = ref(null)
@@ -191,6 +200,41 @@ const error = ref('')
 const userComment = ref('')
 const likingComments = ref(new Set())
 
+// Star rating related
+const currentScore = ref(0)
+const hoverScore = ref(0)
+const updatingScore = ref(false)
+
+// Update score function
+async function updateScore(score) {
+  if (updatingScore.value) return
+  
+  updatingScore.value = true
+  
+  try {
+    const res = await fetch(`/api/rating/${rating.value.id}/score`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ score })
+    })
+    
+    if (res.ok) {
+      currentScore.value = score
+      rating.value.score = score
+      // Emit event to parent to update the ratings list
+      emit('scoreUpdated', rating.value.id, score)
+    } else {
+      alert('評分失敗，請稍後再試')
+    }
+  } catch (err) {
+    alert('評分失敗，請稍後再試')
+  } finally {
+    updatingScore.value = false
+  }
+}
+
 // Open modal and load data
 async function openModal(ratingId) {
   loading.value = true
@@ -198,6 +242,8 @@ async function openModal(ratingId) {
   rating.value = null
   comments.value = []
   userComment.value = ''
+  currentScore.value = 0
+  hoverScore.value = 0
   
   detailModal.value.showModal()
   
@@ -208,6 +254,7 @@ async function openModal(ratingId) {
       const data = await res.json()
       rating.value = data.rating
       comments.value = data.comments || []
+      currentScore.value = data.rating.score || 0
     } else {
       error.value = '找不到該評分項目'
     }
@@ -304,6 +351,7 @@ function formatDate(dateString) {
   })
 }
 </script>
+
 <style>
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
