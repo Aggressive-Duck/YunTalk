@@ -14,8 +14,9 @@
             <!-- 右邊評分總覽 -->
             <div class="flex-1 mt-1">
               <h2 class="text-[22px] font-bold text-black">{{ rating.title }}</h2>
-              <h2 class="text-[12px]  text-gray-400">2115 則熱度</h2>
-              <div class="text-4xl font-bold mt-6  text-yellow-500">{{ rating.score || 0 }} <span class="text-base text-gray-500">/ 5 分</span></div>
+              <h2 class="text-[12px]  text-gray-400">2115 則熱度 ( 下列數據僅為展示，並沒與資料庫進行連接 )</h2>
+              <!-- {{ rating.score || 0 }}  -->
+              <div class="text-4xl font-bold mt-6  text-yellow-500">4.3 <span class="text-base text-gray-500">/ 5 分</span></div>
 
               <!-- 條狀評分 -->
               <div class="space-y-1 mt-4 text-yellow-500">
@@ -68,7 +69,7 @@
           </div>
         <div class="w-[100%] h-[50px] bg-[#fef1cc] rounded-lg flex items-center ps-5">
           <BotMessageSquare class="w-4 h-4 stroke-yellow-600"/>
-          <p class="text-sm ms-2 text-yellow-600 text-[16px]">天啊 ! 這隻貓咪簡直比我聰明100倍</p>
+          <p class="text-sm ms-2 text-yellow-600 text-[16px]">( 預計會篩選出最佳留言並放上 )</p>
         </div>
         <div class="border-t pt-5 text-gray-200">
               <h3 class="text-[16px] font-bold text-gray-800">介紹</h3>
